@@ -1,15 +1,11 @@
 import { buildEnvProxy } from './buildEnvProxy.ts';
-import { buildConfigProxy } from './buildConfigProxy.ts';
-import { CONFIG_GETTERS_MAP } from './config.gettersMap.ts';
-
-import type { Config } from './config.types.ts';
+import { parseConfig } from './config.schema.ts';
 
 const ENV = buildEnvProxy<Record<string, unknown>>(
   import.meta.env,
   (key) => `VITE_${key}`,
 );
 
-export const CONFIG = buildConfigProxy<Config>({
-  env: ENV,
-  envGettersMap: CONFIG_GETTERS_MAP,
-});
+export const CONFIG = parseConfig(ENV);
+
+export type Config = typeof CONFIG;
